@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-center">Resultado de la Cotización</h1>
+
+<div class="container">
+    <div class="row">
+        <!-- Columna izquierda: Bodegas seleccionadas -->
+        <div class="col-md-8">
+            <h2>Bodegas Seleccionadas:</h2>
+            <ul class="list-group">
+                {% for bodega in bodegas_seleccionadas %}
+                    <li class="list-group-item">
+                        Código: {{ bodega.codigo }} - Tipo: {{ bodega.tipo_bodega.tipo }} - Precio: {{ bodega.tipo_bodega.precio }}
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <h2 class="text-center mt-4">Total a pagar por mes: ${{ total }}</h2>
+        </div>
+
+        <!-- Columna derecha: Tipo de bodega seleccionado -->
+        <div class="col-md-4">
+            {% if tipo_seleccionado %}
+                <h3 class="text-center">Tipo de Bodega Seleccionado</h3>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ tipo_seleccionado.tipo }}</h5>
+                        <p class="card-text"><strong>Metros cuadrados:</strong> {{ tipo_seleccionado.metros }} m²</p>
+                        <p class="card-text"><strong>Preparada para químicos industriales:</strong> {{ tipo_seleccionado.quimicos|yesno:"Sí,No" }}</p>
+                        <p class="card-text"><strong>Preparada para material orgánico:</strong> {{ tipo_seleccionado.organicos|yesno:"Sí,No" }}</p>
+                        <p class="card-text"><strong>Hermética:</strong> {{ tipo_seleccionado.hermetico|yesno:"Sí,No" }}</p>
+                        <p class="card-text"><strong>Precio:</strong> ${{ tipo_seleccionado.precio }}</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

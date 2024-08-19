@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-center">Cotización de Bodegas</h1>
+
+<div class="container">
+    <div class="row">
+        <!-- Columna izquierda: Formulario de cotización y bodegas seleccionadas -->
+        <div class="col-md-8">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="tipo_bodega">Selecciona el tipo de bodega:</label>
+                    <select name="tipo_bodega" id="tipo_bodega" class="form-control">
+                        {% for tipo in tipos_disponibles %}
+                            <option value="{{ tipo.id }}">{{ tipo.tipo }} - Precio: {{ tipo.precio }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" name="agregar_bodega" class="btn btn-primary">Agregar Bodega</button>
+            </form>
+
+            <h2 class="mt-4">Bodegas Seleccionadas:</h2>
+            <ul class="list-group">
+                {% for bodega in bodegas_seleccionadas %}
+                    <li class="list-group-item">
+                        {{ bodega.codigo }} - {{ bodega.tipo_bodega.tipo }} - Precio: {{ bodega.tipo_bodega.precio }}
+                        <form method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="bodega_id" value="{{ bodega.id }}">
+                            <button type="submit" name="eliminar_bodega" class="btn btn-danger btn-sm float-right">Eliminar</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                <button type="submit" name="cotizar" class="btn btn-success">Cotizar</button>
+            </form>
+        </div>
+
+        <!-- Columna derecha: Lista de todos los tipos de bodegas disponibles -->
+        <div class="col-md-4">
+            <h2 class="text-center">Tipos de Bodegas Disponibles</h2>
+            <div class="list-group">
+                {% for tipo in tipos_disponibles %}
+                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ tipo.tipo }}</h5>
+                            <small>Precio: ${{ tipo.precio }}</small>
+                        </div>
+                        <p class="mb-1">Tamaño: {{ tipo.metros }} m²</p>
+                        <p class="mb-1">Químicos: {{ tipo.quimicos|yesno:"Sí,No" }}</p>
+                        <p class="mb-1">Orgánicos: {{ tipo.organicos|yesno:"Sí,No" }}</p>
+                        <p class="mb-1">Hermético: {{ tipo.hermetico|yesno:"Sí,No" }}</p>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
